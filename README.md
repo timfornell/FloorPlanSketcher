@@ -125,6 +125,81 @@ Naturally, since I don't know how to start, a brief chat with ChatGPT is needed.
 
 7. **Continued development**: As you progress with your project, continue developing additional features, implementing AI model integration, and any other functionalities you have planned within your React components.
 
-After doing step 1-3, it appears that I have a folder structure setup and that I am ready to start "writing" code.
+After doing step 1-3, it appears that I almost have the same folder structure as mentioned earlier, the only thing missing is the folder '**components**' and the file inside. Once they have been created I am ready to start "writing" code.
 
 ## "Writing" code
+
+One question to ChatGPT, "For the step "Implement drawing functionality", can you suggest some code to put in the App.tsx file?", prompts the following code:
+
+```Typescript
+import React, { useRef, useEffect } from 'react';
+
+function App() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  let isDrawing = false;
+  let context: CanvasRenderingContext2D | null = null;
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      context = canvas.getContext('2d');
+    }
+  }, []);
+
+  const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    isDrawing = true;
+    const { offsetX, offsetY } = event.nativeEvent;
+    context?.beginPath();
+    context?.moveTo(offsetX, offsetY);
+  };
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDrawing) return;
+    const { offsetX, offsetY } = event.nativeEvent;
+    context?.lineTo(offsetX, offsetY);
+    context?.stroke();
+  };
+
+  const handleMouseUp = () => {
+    isDrawing = false;
+  };
+
+  return (
+    <div>
+      <h1>Draw your floor plan</h1>
+      <canvas
+        ref={canvasRef}
+        width={800}
+        height={600}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+      ></canvas>
+    </div>
+  );
+}
+
+export default App;
+```
+
+Along with the following explanation:
+
+This code sets up a canvas element where users can draw their floor plan using the mouse. The canvas element is accessed using the '**useRef**' hook, and the drawing interactions are handled through event handlers.
+
+The '**handleMouseDown**' function is triggered when the user presses the mouse button down. It starts a new path in the canvas context and moves the starting point to the cursor's position.
+
+The '**handleMouseMove**' function is triggered when the user moves the mouse while holding down the mouse button. It draws lines on the canvas context from the current point to the cursor's position.
+
+The '**handleMouseUp**' function is triggered when the user releases the mouse button. It stops the drawing action by setting the isDrawing flag to false.
+
+### First compilation
+
+To test the code from the previous chapter, one simply enters the folder '**floor-plan-sketcher**' and runs <code>npm run</code>. However, when doing so at this stage, one is presented with an error message:
+
+```bash
+TS1208: 'DrawingArea.tsx' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.
+```
+
+ChatGPT suggests to disable '**isolatedModules**' in '**tsconfig.json**' to get around this issue. However, if I understand this issue correctly, it is caused by the fact that the file is empty at the moment. I found this interesting, since it means that, when ChatGPT suggested code for '**App.tsx**', it forgot about this empty file. It would have been nice with a prompt stating that the drawing functionality should have been placed in there to begin with. Either way, to get around this problem I asked it to split the code between these two files, which it did. The result from the next compilation is pretty much summed up by this image:
+
+![Image from first successful compilation](images/HelloWorld.png)
