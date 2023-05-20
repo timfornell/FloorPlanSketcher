@@ -104,6 +104,10 @@ Explanation of the folders and files:
 
 ## Website Development
 
+As suggested above, the first step is to develop the website. This section contains all information related to this.
+
+### Where to start
+
 Naturally, since I don't know how to start, a brief chat with ChatGPT is needed. It suggests the following steps to start up:
 
 1. **Setup**: Ensure that you have Node.js and npm (Node Package Manager) installed on your computer.
@@ -122,7 +126,7 @@ Naturally, since I don't know how to start, a brief chat with ChatGPT is needed.
 4. **Create the project files**: Create the necessary files for your TypeScript project. Typically, you would have an HTML file for the website structure and a TypeScript file for your code. Create an HTML file (e.g., index.html) and a TypeScript file (e.g., index.ts).
 5. **Configure TypeScript**: Create a tsconfig.json file in your project's root directory to configure TypeScript. This file specifies the TypeScript compiler options. You can use the following minimal configuration:
 
-   ```bash
+   ```json
    {
       "compilerOptions": {
          "target": "es5",
@@ -130,3 +134,39 @@ Naturally, since I don't know how to start, a brief chat with ChatGPT is needed.
       }
    }
    ```
+
+An observant reader may have realized that the json structure under step 5 looks incomplete, and that would be correct. I only noticed this when I pasted it into *tsconfig.json* and the autoformatter complained about a missing value. When asking ChatGPT about this it provided updated file content and a thorough explanation of what it contains.
+
+**Updated json file:**
+
+```json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "sourceMap": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+```
+
+**Explanation of content:**
+
+- ****target****: Specifies the ECMAScript version to which TypeScript will compile the code. In this case, it is set to "es5", which supports most modern browsers.
+- **module**: Determines the module code generation. "esnext" is chosen here, which is compatible with modern JavaScript modules.
+- **outDir**: Specifies the output directory for compiled TypeScript files. In this case, it is set to "dist" to match the suggested folder structure.
+- **strict**: Enables strict type-checking and additional compile-time checks. It is set to true for enhanced type safety.
+- **esModuleInterop**: Enables interoperability between CommonJS and ES Modules. It allows for seamless usage of modules written in different module systems.
+- **sourceMap**: Generates source map files alongside the compiled JavaScript files, which helps in debugging TypeScript code.
+- **include**: Specifies the files or patterns to include in the TypeScript compilation process. In this example, it includes all .ts files in the src directory and its subdirectories.
+- **exclude**: Specifies the files or patterns to exclude from the TypeScript compilation process. In this case, it excludes the node_modules folder to avoid unnecessary compilation.
+
+For a complete newbie, such as myself, this was quite useful.
